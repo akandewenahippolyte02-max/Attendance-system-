@@ -1,0 +1,126 @@
+// Student.h
+#ifndef STUDENT_H
+#define STUDENT_H
+
+#include <string>
+
+class Student {
+private:
+    std::string indexNumber;
+    std::string name;
+
+public:
+    // Constructor
+    Student(std::string idx, std::string n);
+
+    // Getters
+    std::string getIndexNumber() const;
+    std::string getName() const;
+
+    // Setters
+    void setIndexNumber(std::string idx);
+    void setName(std::string n);
+
+    // Display student info
+    void displayStudent() const;
+};
+
+#endif // STUDENT_H
+// Student.cpp
+#include "Student.h"
+#include <iostream>
+
+Student::Student(std::string idx, std::string n)
+    : indexNumber(idx), name(n) {}
+
+std::string Student::getIndexNumber() const {
+    return indexNumber;
+}
+
+std::string Student::getName() const {
+    return name;
+}
+
+void Student::setIndexNumber(std::string idx) {
+    indexNumber = idx;
+}
+
+void Student::setName(std::string n) {
+    name = n;
+}
+
+void Student::displayStudent() const {
+    std::cout << "Index Number: " << indexNumber << std::endl;
+    std::cout << "Name: " << name << std::endl;
+}
+// main.cpp
+#include "Student.h"
+#include <iostream>
+#include <vector>
+
+void registerStudent(std::vector<Student>& students);
+void viewStudents(const std::vector<Student>& students);
+void searchStudent(const std::vector<Student>& students);
+
+int main() {
+    std::vector<Student> students;
+    int choice;
+
+    do {
+        std::cout << "1. Register Student\n";
+        std::cout << "2. View Students\n";
+        std::cout << "3. Search Student\n";
+        std::cout << "4. Exit\n";
+        std::cout << "Enter choice: ";
+        std::cin >> choice;
+
+        switch (choice) {
+            case 1:
+                registerStudent(students);
+                break;
+            case 2:
+                viewStudents(students);
+                break;
+            case 3:
+                searchStudent(students);
+                break;
+            case 4:
+                std::cout << "Exiting...\n";
+                break;
+            default:
+                std::cout << "Invalid choice. Try again.\n";
+        }
+    } while (choice != 4);
+
+    return 0;
+}
+
+void registerStudent(std::vector<Student>& students) {
+    std::string idx, name;
+    std::cout << "Enter index number: ";
+    std::cin >> idx;
+    std::cout << "Enter name: ";
+    std::cin.ignore(); // clear input buffer
+    std::getline(std::cin, name);
+    students.push_back(Student(idx, name));
+    std::cout << "Student registered.\n";
+}
+
+void viewStudents(const std::vector<Student>& students) {
+    for (const auto& student : students) {
+        student.displayStudent();
+    }
+}
+
+void searchStudent(const std::vector<Student>& students) {
+    std::string idx;
+    std::cout << "Enter index number to search: ";
+    std::cin >> idx;
+    for (const auto& student : students) {
+        if (student.getIndexNumber() == idx) {
+            student.displayStudent();
+            return;
+        }
+    }
+    std::cout << "Student not found.\n";
+}
